@@ -34,6 +34,14 @@ struct BookDetailsView: View {
 
 struct BookDetailsView_Previews: PreviewProvider {
   static var previews: some View {
-    BookDetailsView(book: Binding.constant(BooksRepository().books[0]))
+    PreviewWrapper()
+  }
+  
+  struct PreviewWrapper: View {
+    @ObservedObject var repo = BooksRepository()
+    
+    var body: some View {
+      BookDetailsView(book: $repo.books[0])
+    }
   }
 }
