@@ -7,11 +7,17 @@
 //
 
 import Foundation
+import FirebaseFirestoreSwift
 
-struct Book: Identifiable {
-  let id: UUID
+struct Book: Identifiable, Codable {
+  @DocumentID var id: String? = UUID().uuidString
   var title: String
   var author: String
   var numberOfPages: Int
-  var isRead: Bool
+  
+  enum CodingKeys: String, CodingKey {
+    case title
+    case author
+    case numberOfPages = "pages"
+  }
 }

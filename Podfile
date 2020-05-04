@@ -8,5 +8,6 @@ target 'BookSpine' do
   # Pods for BookSpine
   pod 'Firebase/Analytics'
   pod 'Firebase/Firestore'
+  pod 'FirebaseFirestoreSwift'
 
 end
