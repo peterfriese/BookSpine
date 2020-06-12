@@ -8,32 +8,65 @@
 
 import SwiftUI
 
-let testData = [
-  Book(title: "The Ultimate Hitchhiker's Guide to the Galaxy: Five Novels in One Outrageous Volume", author: "Douglas Adams", numberOfPages: 815),
-  Book(title: "Changer", author: "Matt Gemmell", numberOfPages: 474),
-  Book(title: "Toll", author: "Matt Gemmell", numberOfPages: 474)
-]
-
 struct BooksListView: View {
-  var books = testData
   @ObservedObject var viewModel = BooksViewModel()
+  @State var presentAddBookSheet = false
   
   var body: some View {
     NavigationView {
-      List(viewModel.books) { book in
-        VStack(alignment: .leading) {
-          Text(book.title)
-            .font(.headline)
-          Text(book.author)
-            .font(.subheadline)
-          Text("\(book.numberOfPages) pages")
-            .font(.subheadline)
+      List {
+        ForEach (viewModel.books) { book in
+          BookRowView(book: book)
+        }
+        .onDelete { indexSet in
+          self.viewModel.removeBooks(at: indexSet)
         }
       }
       .navigationBarTitle("Books")
+      .navigationBarItems(trailing: AddBookButton() {
+        self.presentAddBookSheet.toggle()
+      })
       .onAppear() {
-        self.viewModel.fetchData()
+        print("BooksListView appears. Subscribing to data updates.")
+        self.viewModel.subscribe()
       }
+        // by unsubscribing from the view model, we prevent updates coming in from Firestore to be reflected in the UI
+      .onDisappear() {
+//        print("BooksListView disappears. Unsubscribing from data updates.")
+//        self.viewModel.unsubscribe()
+      }
+      .sheet(isPresented: self.$presentAddBookSheet) {
+        BookEditView(viewModel: BookViewModel.newBook())
+      }
+
+    }
+  }
+}
+
+struct BookRowView: View {
+  var book: Book
+  var body: some View {
+    NavigationLink(destination: BookDetailsView(book: book)) {
+      VStack(alignment: .leading) {
+        Text(book.title)
+          .font(.headline)
+        Text(book.author)
+          .font(.subheadline)
+        Text("\(book.numberOfPages) pages")
+          .font(.subheadline)
+      }
+    }
+    .onAppear() {
+      print("BookRowView appears for \(self.book.title)")
+    }
+  }
+}
+
+struct AddBookButton: View {
+  var action: () -> Void
+  var body: some View {
+    Button(action: { self.action() }) {
+      Image(systemName: "plus")
     }
   }
 }

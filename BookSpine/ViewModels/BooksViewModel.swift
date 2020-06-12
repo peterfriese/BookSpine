@@ -7,44 +7,34 @@
 //
 
 import Foundation
+import Combine
 import FirebaseFirestore
 
 class BooksViewModel: ObservableObject {
   @Published var books = [Book]()
   
-  private var db = Firestore.firestore()
-  private var listenerRegistration: ListenerRegistration?
+  private var repository = BookRepository.sharedInstance
+  private var cancellables = Set<AnyCancellable>()
   
-  deinit {
-    unregister()
+  init() {
+    // subscribe to any changes in the repository
+    repository.$books
+      .assign(to: \.books, on: self)
+      .store(in: &cancellables)
   }
   
-  func unregister() {
-    if listenerRegistration != nil {
-      listenerRegistration?.remove()
-    }
+  func subscribe() {
+    repository.subscribe()
   }
   
-  func fetchData() {
-    unregister()
-    listenerRegistration = db.collection("books").addSnapshotListener { (querySnapshot, error) in
-      guard let documents = querySnapshot?.documents else {
-        print("No documents")
-        return
-      }
-      
-      self.books = documents.compactMap { queryDocumentSnapshot -> Book? in
-        return try? queryDocumentSnapshot.data(as: Book.self)
-      }
-    }
+  func unsubscribe() {
+    repository.unsubscribe()
   }
   
-  func addBook(book: Book) {
-    do {
-      let _ = try db.collection("books").addDocument(from: book)
-    }
-    catch {
-      print(error)
+  func removeBooks(at indexSet: IndexSet) {
+    let booksToRemove = indexSet.lazy.map { self.books[$0] }
+    booksToRemove.forEach { book in
+      repository.removeBook(book)
     }
   }
   
