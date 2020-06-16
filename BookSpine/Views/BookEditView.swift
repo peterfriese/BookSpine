@@ -34,7 +34,7 @@ struct BookEditView: View {
           }
         }
         else {
-          /*@START_MENU_TOKEN@*/EmptyView()/*@END_MENU_TOKEN@*/
+          EmptyView()
         }
       }
       .navigationBarTitle(Text(self.viewModel.title), displayMode: .inline)

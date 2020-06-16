@@ -8,6 +8,7 @@
 
 import Foundation
 import Combine
+import FirebaseFirestore
 
 enum Mode {
   case edit
@@ -24,7 +25,6 @@ class BookViewModel: ObservableObject {
   
   // MARK: - Internal properties
   
-  private var repository = BookRepository.sharedInstance
   private var cancellables = Set<AnyCancellable>()
   
   // MARK: - Constructors
@@ -57,18 +57,53 @@ class BookViewModel: ObservableObject {
       .store(in: &self.cancellables)
   }
   
+  // MARK: - Firestore
+  
+  private var db = Firestore.firestore()
+  
+  func addBook(_ book: Book) {
+    do {
+      let _ = try db.collection("books").addDocument(from: book)
+    }
+    catch {
+      print(error)
+    }
+  }
+
+  
+  func removeBook(_ book: Book) {
+    if let bookId = book.id {
+      db.collection("books").document(bookId).delete() { error in
+        if let error = error {
+          print("Unable to remove document: \(error.localizedDescription)")
+        }
+      }
+    }
+  }
+  
+  func updateBook(_ book: Book) {
+    if let bookId = book.id {
+      do {
+        try db.collection("books").document(bookId).setData(from: book)
+      }
+      catch {
+        fatalError("Unable to encode book: \(error.localizedDescription).")
+      }
+    }
+  }
+  
   // MARK: - Model management
   
   func save() {
-    repository.addBook(self.book)
+    addBook(self.book)
   }
   
   func update() {
-    repository.updateBook(self.book)
+    updateBook(self.book)
   }
   
   func remove() {
-    repository.removeBook(self.book)
+    removeBook(self.book)
   }
   
   // MARK: - UI handlers

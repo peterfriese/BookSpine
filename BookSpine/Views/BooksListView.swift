@@ -32,8 +32,8 @@ struct BooksListView: View {
       }
         // by unsubscribing from the view model, we prevent updates coming in from Firestore to be reflected in the UI
       .onDisappear() {
-//        print("BooksListView disappears. Unsubscribing from data updates.")
-//        self.viewModel.unsubscribe()
+        print("BooksListView disappears. Unsubscribing from data updates.")
+        self.viewModel.unsubscribe()
       }
       .sheet(isPresented: self.$presentAddBookSheet) {
         BookEditView(viewModel: BookViewModel.newBook())

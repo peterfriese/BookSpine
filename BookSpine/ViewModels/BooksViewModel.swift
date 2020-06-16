@@ -13,30 +13,51 @@ import FirebaseFirestore
 class BooksViewModel: ObservableObject {
   @Published var books = [Book]()
   
-  private var repository = BookRepository.sharedInstance
-  private var cancellables = Set<AnyCancellable>()
+  private var db = Firestore.firestore()
+  private var listenerRegistration: ListenerRegistration?
   
-  init() {
-    // subscribe to any changes in the repository
-    repository.$books
-      .assign(to: \.books, on: self)
-      .store(in: &cancellables)
-  }
-  
-  func subscribe() {
-    repository.subscribe()
+  deinit {
+    unsubscribe()
   }
   
   func unsubscribe() {
-    repository.unsubscribe()
+    if listenerRegistration != nil {
+      listenerRegistration?.remove()
+      listenerRegistration = nil
+    }
+  }
+  
+  func subscribe() {
+    if listenerRegistration == nil {
+      listenerRegistration = db.collection("books").addSnapshotListener { (querySnapshot, error) in
+        guard let documents = querySnapshot?.documents else {
+          print("No documents")
+          return
+        }
+        
+        self.books = documents.compactMap { queryDocumentSnapshot in
+          try? queryDocumentSnapshot.data(as: Book.self)
+        }
+      }
+    }
   }
   
   func removeBooks(at indexSet: IndexSet) {
     let booksToRemove = indexSet.lazy.map { self.books[$0] }
     booksToRemove.forEach { book in
-      repository.removeBook(book)
+      removeBook(book)
     }
   }
   
+  func removeBook(_ book: Book) {
+    if let bookId = book.id {
+      db.collection("books").document(bookId).delete() { error in
+        if let error = error {
+          print("Unable to remove document: \(error.localizedDescription)")
+        }
+      }
+    }
+  }
+
 }
 
