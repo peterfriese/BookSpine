@@ -42,22 +42,5 @@ class BooksViewModel: ObservableObject {
     }
   }
   
-  func removeBooks(at indexSet: IndexSet) {
-    let booksToRemove = indexSet.lazy.map { self.books[$0] }
-    booksToRemove.forEach { book in
-      removeBook(book)
-    }
-  }
-  
-  func removeBook(_ book: Book) {
-    if let bookId = book.id {
-      db.collection("books").document(bookId).delete() { error in
-        if let error = error {
-          print("Unable to remove document: \(error.localizedDescription)")
-        }
-      }
-    }
-  }
-
 }
 

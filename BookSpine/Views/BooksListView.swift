@@ -18,9 +18,6 @@ struct BooksListView: View {
         ForEach (viewModel.books) { book in
           BookRowView(book: book)
         }
-        .onDelete { indexSet in
-          self.viewModel.removeBooks(at: indexSet)
-        }
       }
       .navigationBarTitle("Books")
       .navigationBarItems(trailing: AddBookButton() {
@@ -30,13 +27,13 @@ struct BooksListView: View {
         print("BooksListView appears. Subscribing to data updates.")
         self.viewModel.subscribe()
       }
-        // by unsubscribing from the view model, we prevent updates coming in from Firestore to be reflected in the UI
+      // by unsubscribing from the view model, we prevent updates coming in from Firestore to be reflected in the UI
       .onDisappear() {
         print("BooksListView disappears. Unsubscribing from data updates.")
         self.viewModel.unsubscribe()
       }
       .sheet(isPresented: self.$presentAddBookSheet) {
-        BookEditView(viewModel: BookViewModel.newBook())
+        BookEditView(viewModel: BookViewModel())
       }
 
     }
@@ -46,15 +43,13 @@ struct BooksListView: View {
 struct BookRowView: View {
   var book: Book
   var body: some View {
-    NavigationLink(destination: BookDetailsView(book: book)) {
-      VStack(alignment: .leading) {
-        Text(book.title)
-          .font(.headline)
-        Text(book.author)
-          .font(.subheadline)
-        Text("\(book.numberOfPages) pages")
-          .font(.subheadline)
-      }
+    VStack(alignment: .leading) {
+      Text(book.title)
+        .font(.headline)
+      Text(book.author)
+        .font(.subheadline)
+      Text("\(book.numberOfPages) pages")
+        .font(.subheadline)
     }
     .onAppear() {
       print("BookRowView appears for \(self.book.title)")
