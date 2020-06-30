@@ -8,10 +8,11 @@
 
 import SwiftUI
 
+@available(iOS 14.0, *)
 struct BooksListView: View {
-  @ObservedObject var viewModel = BooksViewModel()
+  @StateObject var viewModel = BooksViewModel()
   @State var presentAddBookSheet = false
-  
+
   var body: some View {
     NavigationView {
       List {
@@ -33,7 +34,7 @@ struct BooksListView: View {
         self.viewModel.unsubscribe()
       }
       .sheet(isPresented: self.$presentAddBookSheet) {
-        BookEditView(viewModel: BookViewModel())
+        BookEditView()
       }
 
     }

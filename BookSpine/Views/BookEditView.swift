@@ -9,8 +9,8 @@
 import SwiftUI
 
 struct BookEditView: View {
-  @Environment(\.presentationMode) var presentationMode
-  @ObservedObject var viewModel: BookViewModel
+  @Environment(\.presentationMode) private var presentationMode
+  @StateObject var viewModel = BookViewModel()
   
   var body: some View {
     NavigationView {
