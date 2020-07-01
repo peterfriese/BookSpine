@@ -80,7 +80,7 @@ This project uses Cocoapods to manage dependencies.
 
 ``` bash
 git clone https://github.com/peterfriese/BookSpine.git
-cd code/BookSpine
+cd BookSpine/code
 pod install
 xed .
 ```
