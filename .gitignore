@@ -334,3 +334,4 @@ fabric.properties
 !/gradle/wrapper/gradle-wrapper.jar
 
 # End of https://www.gitignore.io/api/xcode,swift,android,swiftpm,firebase,cocoapods,androidstudio,visualstudiocode,swiftpackagemanager
+GoogleService-Info.plist
