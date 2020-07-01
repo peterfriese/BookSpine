@@ -7,6 +7,7 @@
 //
 
 import Foundation
+import Combine
 import FirebaseFirestore
 
 class BooksViewModel: ObservableObject {
@@ -16,35 +17,28 @@ class BooksViewModel: ObservableObject {
   private var listenerRegistration: ListenerRegistration?
   
   deinit {
-    unregister()
+    unsubscribe()
   }
   
-  func unregister() {
+  func unsubscribe() {
     if listenerRegistration != nil {
       listenerRegistration?.remove()
+      listenerRegistration = nil
     }
   }
   
-  func fetchData() {
-    unregister()
-    listenerRegistration = db.collection("books").addSnapshotListener { (querySnapshot, error) in
-      guard let documents = querySnapshot?.documents else {
-        print("No documents")
-        return
+  func subscribe() {
+    if listenerRegistration == nil {
+      listenerRegistration = db.collection("books").addSnapshotListener { (querySnapshot, error) in
+        guard let documents = querySnapshot?.documents else {
+          print("No documents")
+          return
+        }
+        
+        self.books = documents.compactMap { queryDocumentSnapshot in
+          try? queryDocumentSnapshot.data(as: Book.self)
+        }
       }
-      
-      self.books = documents.compactMap { queryDocumentSnapshot -> Book? in
-        return try? queryDocumentSnapshot.data(as: Book.self)
-      }
-    }
-  }
-  
-  func addBook(book: Book) {
-    do {
-      let _ = try db.collection("books").addDocument(from: book)
-    }
-    catch {
-      print(error)
     }
   }
   
