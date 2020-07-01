@@ -152,6 +152,6 @@ Project Link: [https://github.com/peterfriese/BookSpine](https://github.com/pete
 [linkedin-shield]: https://img.shields.io/badge/-LinkedIn-black.svg?style=flat-square&logo=linkedin&colorB=555
 [linkedin-url]: https://linkedin.com/in/peterfriese
 
-[product-screenshot]: assets/screenshot.png
+[product-screenshot]: assets/screenflow.png
 [product-demo]: assets/demo.gif
 [product-screenshot]: assets/screenshot.png "Screenshot of BookSpine, a replication of the iOS Reminders app"
