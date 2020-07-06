@@ -42,14 +42,5 @@ class BooksViewModel: ObservableObject {
     }
   }
   
-  func addBook(book: Book) {
-    do {
-      let _ = try db.collection("books").addDocument(from: book)
-    }
-    catch {
-      print(error)
-    }
-  }
-  
 }
 

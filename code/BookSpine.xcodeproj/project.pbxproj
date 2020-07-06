@@ -15,6 +15,8 @@
 		882674312446FA3E001938A5 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 8826742F2446FA3E001938A5 /* LaunchScreen.storyboard */; };
 		8826743D2446FB5B001938A5 /* Book.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8826743C2446FB5B001938A5 /* Book.swift */; };
 		8826744E2447450A001938A5 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 8826744D2447450A001938A5 /* GoogleService-Info.plist */; };
+		885F9B4624B32FE700B5D891 /* BookViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 885F9B4524B32FE700B5D891 /* BookViewModel.swift */; };
+		885F9B4824B3310B00B5D891 /* BookEditView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 885F9B4724B3310B00B5D891 /* BookEditView.swift */; };
 		88C521CA24924D5E00C767C1 /* Publisher+Assign.swift in Sources */ = {isa = PBXBuildFile; fileRef = 88C521C924924D5E00C767C1 /* Publisher+Assign.swift */; };
 		88D2D8A62447585900732B1C /* BooksViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 88D2D8A52447585900732B1C /* BooksViewModel.swift */; };
 		9F2E721FEDAF9DA7337D81B4 /* Pods_BookSpine.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0C4EFAE786FA783F17834523 /* Pods_BookSpine.framework */; };
@@ -32,6 +34,8 @@
 		882674322446FA3E001938A5 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		8826743C2446FB5B001938A5 /* Book.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Book.swift; sourceTree = "<group>"; };
 		8826744D2447450A001938A5 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
+		885F9B4524B32FE700B5D891 /* BookViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BookViewModel.swift; sourceTree = "<group>"; };
+		885F9B4724B3310B00B5D891 /* BookEditView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BookEditView.swift; sourceTree = "<group>"; };
 		88C521C924924D5E00C767C1 /* Publisher+Assign.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Publisher+Assign.swift"; sourceTree = "<group>"; };
 		88D2D8A52447585900732B1C /* BooksViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BooksViewModel.swift; sourceTree = "<group>"; };
 		E9B9B0914A3DC1AE7B4B2872 /* Pods-BookSpine.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-BookSpine.release.xcconfig"; path = "Target Support Files/Pods-BookSpine/Pods-BookSpine.release.xcconfig"; sourceTree = "<group>"; };
@@ -114,6 +118,7 @@
 			isa = PBXGroup;
 			children = (
 				882674282446FA3D001938A5 /* BooksListView.swift */,
+				885F9B4724B3310B00B5D891 /* BookEditView.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -138,6 +143,7 @@
 			isa = PBXGroup;
 			children = (
 				88D2D8A52447585900732B1C /* BooksViewModel.swift */,
+				885F9B4524B32FE700B5D891 /* BookViewModel.swift */,
 			);
 			path = ViewModels;
 			sourceTree = "<group>";
@@ -268,6 +274,8 @@
 			buildActionMask = 2147483647;
 			files = (
 				8826743D2446FB5B001938A5 /* Book.swift in Sources */,
+				885F9B4824B3310B00B5D891 /* BookEditView.swift in Sources */,
+				885F9B4624B32FE700B5D891 /* BookViewModel.swift in Sources */,
 				88C521CA24924D5E00C767C1 /* Publisher+Assign.swift in Sources */,
 				88D2D8A62447585900732B1C /* BooksViewModel.swift in Sources */,
 				882674252446FA3D001938A5 /* AppDelegate.swift in Sources */,

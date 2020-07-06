@@ -9,6 +9,7 @@
 import SwiftUI
 
 struct BooksListView: View {
+  @State private var presentAddNewBookSheet = false
   @ObservedObject var viewModel = BooksViewModel()
 
   var body: some View {
@@ -19,11 +20,21 @@ struct BooksListView: View {
         }
       }
       .navigationBarTitle("Books")
+      .toolbar {
+        ToolbarItem(placement: .primaryAction) {
+          Button(action: { presentAddNewBookSheet.toggle() }, label: {
+            Image(systemName: "plus")
+          })
+        }
+      }
       .onAppear() {
         self.viewModel.subscribe()
       }
       .onDisappear() {
         self.viewModel.unsubscribe()
+      }
+      .sheet(isPresented: $presentAddNewBookSheet) {
+        BookEditView()
       }
     }
   }
