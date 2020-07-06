@@ -8,10 +8,8 @@
 
 import SwiftUI
 
-@available(iOS 14.0, *)
 struct BooksListView: View {
-  @StateObject var viewModel = BooksViewModel()
-  @State var presentAddBookSheet = false
+  @ObservedObject var viewModel = BooksViewModel()
 
   var body: some View {
     NavigationView {
@@ -21,22 +19,12 @@ struct BooksListView: View {
         }
       }
       .navigationBarTitle("Books")
-      .navigationBarItems(trailing: AddBookButton() {
-        self.presentAddBookSheet.toggle()
-      })
       .onAppear() {
-        print("BooksListView appears. Subscribing to data updates.")
         self.viewModel.subscribe()
       }
-      // by unsubscribing from the view model, we prevent updates coming in from Firestore to be reflected in the UI
       .onDisappear() {
-        print("BooksListView disappears. Unsubscribing from data updates.")
         self.viewModel.unsubscribe()
       }
-      .sheet(isPresented: self.$presentAddBookSheet) {
-        BookEditView()
-      }
-
     }
   }
 }
@@ -51,18 +39,6 @@ struct BookRowView: View {
         .font(.subheadline)
       Text("\(book.numberOfPages) pages")
         .font(.subheadline)
-    }
-    .onAppear() {
-      print("BookRowView appears for \(self.book.title)")
-    }
-  }
-}
-
-struct AddBookButton: View {
-  var action: () -> Void
-  var body: some View {
-    Button(action: { self.action() }) {
-      Image(systemName: "plus")
     }
   }
 }

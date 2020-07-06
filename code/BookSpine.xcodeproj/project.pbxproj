@@ -15,10 +15,8 @@
 		882674312446FA3E001938A5 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 8826742F2446FA3E001938A5 /* LaunchScreen.storyboard */; };
 		8826743D2446FB5B001938A5 /* Book.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8826743C2446FB5B001938A5 /* Book.swift */; };
 		8826744E2447450A001938A5 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 8826744D2447450A001938A5 /* GoogleService-Info.plist */; };
-		8879CAE8248F96E200D27209 /* BookViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8879CAE7248F96E200D27209 /* BookViewModel.swift */; };
 		88C521CA24924D5E00C767C1 /* Publisher+Assign.swift in Sources */ = {isa = PBXBuildFile; fileRef = 88C521C924924D5E00C767C1 /* Publisher+Assign.swift */; };
 		88D2D8A62447585900732B1C /* BooksViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 88D2D8A52447585900732B1C /* BooksViewModel.swift */; };
-		88E67224246418DC0050FDA8 /* BookEditView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 88E67223246418DC0050FDA8 /* BookEditView.swift */; };
 		9F2E721FEDAF9DA7337D81B4 /* Pods_BookSpine.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0C4EFAE786FA783F17834523 /* Pods_BookSpine.framework */; };
 /* End PBXBuildFile section */
 
@@ -34,10 +32,8 @@
 		882674322446FA3E001938A5 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		8826743C2446FB5B001938A5 /* Book.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Book.swift; sourceTree = "<group>"; };
 		8826744D2447450A001938A5 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
-		8879CAE7248F96E200D27209 /* BookViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BookViewModel.swift; sourceTree = "<group>"; };
 		88C521C924924D5E00C767C1 /* Publisher+Assign.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Publisher+Assign.swift"; sourceTree = "<group>"; };
 		88D2D8A52447585900732B1C /* BooksViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BooksViewModel.swift; sourceTree = "<group>"; };
-		88E67223246418DC0050FDA8 /* BookEditView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BookEditView.swift; sourceTree = "<group>"; };
 		E9B9B0914A3DC1AE7B4B2872 /* Pods-BookSpine.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-BookSpine.release.xcconfig"; path = "Target Support Files/Pods-BookSpine/Pods-BookSpine.release.xcconfig"; sourceTree = "<group>"; };
 		EEBEDA3874A9545D172F829E /* Pods-BookSpine.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-BookSpine.debug.xcconfig"; path = "Target Support Files/Pods-BookSpine/Pods-BookSpine.debug.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -118,7 +114,6 @@
 			isa = PBXGroup;
 			children = (
 				882674282446FA3D001938A5 /* BooksListView.swift */,
-				88E67223246418DC0050FDA8 /* BookEditView.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -143,7 +138,6 @@
 			isa = PBXGroup;
 			children = (
 				88D2D8A52447585900732B1C /* BooksViewModel.swift */,
-				8879CAE7248F96E200D27209 /* BookViewModel.swift */,
 			);
 			path = ViewModels;
 			sourceTree = "<group>";
@@ -274,12 +268,10 @@
 			buildActionMask = 2147483647;
 			files = (
 				8826743D2446FB5B001938A5 /* Book.swift in Sources */,
-				88E67224246418DC0050FDA8 /* BookEditView.swift in Sources */,
 				88C521CA24924D5E00C767C1 /* Publisher+Assign.swift in Sources */,
 				88D2D8A62447585900732B1C /* BooksViewModel.swift in Sources */,
 				882674252446FA3D001938A5 /* AppDelegate.swift in Sources */,
 				882674272446FA3D001938A5 /* SceneDelegate.swift in Sources */,
-				8879CAE8248F96E200D27209 /* BookViewModel.swift in Sources */,
 				882674292446FA3D001938A5 /* BooksListView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
