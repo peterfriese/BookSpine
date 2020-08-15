@@ -7,18 +7,23 @@
 //
 
 import Foundation
+import FirebaseFirestore
 import FirebaseFirestoreSwift
 
 struct Book: Identifiable, Codable {
-  @DocumentID var id: String?
-  var title: String
-  var author: String
-  var numberOfPages: Int
-  
-  enum CodingKeys: String, CodingKey {
-    case id
-    case title
-    case author
-    case numberOfPages = "pages"
-  }
+    @DocumentID var id: String?
+    @ServerTimestamp var createdAt: Timestamp?
+    var userId: String
+    var title: String
+    var author: String
+    var numberOfPages: Int
+    
+    enum CodingKeys: String, CodingKey {
+        case id
+        case createdAt
+        case userId
+        case title
+        case author
+        case numberOfPages = "pages"
+    }
 }
