@@ -9,54 +9,73 @@
 import SwiftUI
 
 struct BookEditView: View {
-  @Environment(\.presentationMode) private var presentationMode
-  @StateObject var viewModel = BookViewModel()
-  
-  var body: some View {
-    NavigationView {
-      Form {
-        Section(header: Text("Book")) {
-          TextField("Title", text: $viewModel.book.title)
-          TextField("Number of pages", value: $viewModel.book.numberOfPages, formatter: NumberFormatter())
+    @Environment(\.presentationMode) private var presentationMode
+    @ObservedObject var bookCellVM: BookCellViewModel
+    
+    var onCommit: (Result<Book, InputError>) -> Void = { _ in }
+    
+    var body: some View {
+        NavigationView {
+            Form {
+                Section(header: Text("Book")) {
+                    TextField("Title", text: $bookCellVM.book.title,
+                        onCommit: {
+                        if !self.bookCellVM.book.title.isEmpty {
+                            self.onCommit(.success(self.bookCellVM.book))
+                        }
+                        else {
+                            self.onCommit(.failure(.empty))
+                        }
+                        }).id(bookCellVM.book.id)
+                    
+                    TextField("Number of pages", value: $bookCellVM.book.numberOfPages, formatter: NumberFormatter(),
+                              onCommit: {
+                                if (self.bookCellVM.book.numberOfPages == 0) {
+                                  self.onCommit(.success(self.bookCellVM.book))
+                              }
+                              else {
+                                  self.onCommit(.failure(.empty))
+                              }
+                              }).id(bookCellVM.book.id)
+                }
+                
+                Section(header: Text("Author")) {
+                    TextField("Author", text: $bookCellVM.book.author,
+                              onCommit: {
+                                if !self.bookCellVM.book.author.isEmpty {
+                                  self.onCommit(.success(self.bookCellVM.book))
+                              }
+                              else {
+                                  self.onCommit(.failure(.empty))
+                              }
+                              }).id(bookCellVM.book.id)
+                }
+            }
+            .navigationBarTitle("New book", displayMode: .inline)
+            .navigationBarItems(
+                leading:
+                    Button(action: { self.handleCancelTapped() }) {
+                        Text("Cancel")
+                    },
+                trailing:
+                    Button(action: { self.handleDoneTapped() }) {
+                        Text("Done")
+                    }
+                    .disabled(!bookCellVM.modified)
+            )
         }
-        
-        Section(header: Text("Author")) {
-          TextField("Author", text: $viewModel.book.author)
-        }
-      }
-      .navigationBarTitle("New book", displayMode: .inline)
-      .navigationBarItems(
-        leading:
-          Button(action: { self.handleCancelTapped() }) {
-            Text("Cancel")
-          },
-        trailing:
-          Button(action: { self.handleDoneTapped() }) {
-            Text("Done")
-          }
-          .disabled(!viewModel.modified)
-        )
     }
-  }
-  
-  func handleCancelTapped() {
-    dismiss()
-  }
-  
-  func handleDoneTapped() {
-    self.viewModel.handleDoneTapped()
-    dismiss()
-  }
-  
-  func dismiss() {
-    self.presentationMode.wrappedValue.dismiss()
-  }
-}
-
-struct BookEditView_Previews: PreviewProvider {
-  static var previews: some View {
-    let book = Book(title: "Changer", author: "Matt Gemmell", numberOfPages: 474)
-    let bookViewModel = BookViewModel(book: book)
-    return BookEditView(viewModel: bookViewModel)
-  }
+    
+    func handleCancelTapped() {
+        dismiss()
+    }
+    
+    func handleDoneTapped() {
+//        self.bookCellVM.handleDoneTapped()
+        dismiss()
+    }
+    
+    func dismiss() {
+        self.presentationMode.wrappedValue.dismiss()
+    }
 }
