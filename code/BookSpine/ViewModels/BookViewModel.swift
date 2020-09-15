@@ -57,14 +57,14 @@ class BookViewModel: ObservableObject {
     }
   }
   
-  private func updateOrAddBook(_ book: Book) {
+  private func updateOrAddBook() {
     if let documentId = book.id {
       db.collection("books").document(documentId).getDocument { (documentSnapshot, error) in
         if let exists = documentSnapshot?.exists, exists == true {
-          self.updateBook(book)
+          self.updateBook(self.book)
         }
         else {
-          self.addBook(book)
+          self.addBook(self.book)
         }
       }
     }
@@ -73,16 +73,24 @@ class BookViewModel: ObservableObject {
     }
   }
   
-  // MARK: - Model management
-  
-  func save() {
-    updateOrAddBook(self.book)
+  private func removeBook() {
+    if let documentId = book.id {
+      db.collection("books").document(documentId).delete { error in
+        if let error = error {
+          print(error.localizedDescription)
+        }
+      }
+    }
   }
   
   // MARK: - UI handlers
   
   func handleDoneTapped() {
-    self.save()
+    self.updateOrAddBook()
+  }
+  
+  func handleDeleteTapped() {
+    self.removeBook()
   }
 
 }

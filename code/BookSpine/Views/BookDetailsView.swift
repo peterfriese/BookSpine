@@ -36,7 +36,11 @@ struct BookDetailsView: View {
       print("BookDetailsView.onDisappear()")
     }
     .sheet(isPresented: self.$presentEditBookSheet) {
-      BookEditView(viewModel: BookViewModel(book: book), mode: .edit)
+      BookEditView(viewModel: BookViewModel(book: book), mode: .edit) { result in
+        if case .success(let action) = result, action == .delete {
+          self.presentationMode.wrappedValue.dismiss()
+        }
+      }
     }
   }
   

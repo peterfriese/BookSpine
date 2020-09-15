@@ -13,11 +13,20 @@ enum Mode {
   case edit
 }
 
+enum Action {
+  case delete
+  case done
+  case cancel
+}
+
 struct BookEditView: View {
   @Environment(\.presentationMode) private var presentationMode
   @ObservedObject var viewModel = BookViewModel()
+  @State var presentActionSheet = false
   
   var mode: Mode = .new
+  
+  var completionHandler: ((Result<Action, Error>) -> Void)?
   
   var body: some View {
     NavigationView {
@@ -29,6 +38,13 @@ struct BookEditView: View {
         
         Section(header: Text("Author")) {
           TextField("Author", text: $viewModel.book.author)
+        }
+        
+        if mode == .edit {
+          Section {
+            Button("Delete book") { self.presentActionSheet.toggle() }
+              .foregroundColor(.red)
+          }
         }
       }
       .navigationBarTitle(mode == .new ? "New book" : viewModel.book.title,
@@ -44,16 +60,30 @@ struct BookEditView: View {
           }
           .disabled(!viewModel.modified)
       )
+      .actionSheet(isPresented: $presentActionSheet) {
+        ActionSheet(title: Text("Are you sure?"),
+                    buttons: [
+                      .destructive(Text("Delete book"),
+                                   action: { self.handleDeleteTapped() }),
+                      .cancel()
+                    ])
+      }
     }
   }
   
   func handleCancelTapped() {
-    dismiss()
+    self.dismiss()
   }
   
   func handleDoneTapped() {
     self.viewModel.handleDoneTapped()
-    dismiss()
+    self.dismiss()
+  }
+  
+  func handleDeleteTapped() {
+    viewModel.handleDeleteTapped()
+    self.dismiss()
+    self.completionHandler?(.success(.delete))
   }
   
   func dismiss() {
