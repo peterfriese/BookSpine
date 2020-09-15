@@ -16,22 +16,8 @@ enum Mode {
 struct BookEditView: View {
   @Environment(\.presentationMode) private var presentationMode
   @ObservedObject var viewModel = BookViewModel()
-  @State var book = Book(title: "", author: "", numberOfPages: 12)
   
   var mode: Mode = .new
-  
-  var bookEditForm: some View {
-    Form {
-      Section(header: Text("Book")) {
-        TextField("Title", text: $book.title)
-        TextField("Number of pages", value: $viewModel.book.numberOfPages, formatter: NumberFormatter())
-      }
-      
-      Section(header: Text("Author")) {
-        TextField("Author", text: $viewModel.book.author)
-      }
-    }
-  }
   
   var body: some View {
     NavigationView {
