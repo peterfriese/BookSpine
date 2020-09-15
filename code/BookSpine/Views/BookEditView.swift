@@ -8,9 +8,30 @@
 
 import SwiftUI
 
+enum Mode {
+  case new
+  case edit
+}
+
 struct BookEditView: View {
   @Environment(\.presentationMode) private var presentationMode
-  @StateObject var viewModel = BookViewModel()
+  @ObservedObject var viewModel = BookViewModel()
+  @State var book = Book(title: "", author: "", numberOfPages: 12)
+  
+  var mode: Mode = .new
+  
+  var bookEditForm: some View {
+    Form {
+      Section(header: Text("Book")) {
+        TextField("Title", text: $book.title)
+        TextField("Number of pages", value: $viewModel.book.numberOfPages, formatter: NumberFormatter())
+      }
+      
+      Section(header: Text("Author")) {
+        TextField("Author", text: $viewModel.book.author)
+      }
+    }
+  }
   
   var body: some View {
     NavigationView {
@@ -24,7 +45,8 @@ struct BookEditView: View {
           TextField("Author", text: $viewModel.book.author)
         }
       }
-      .navigationBarTitle("New book", displayMode: .inline)
+      .navigationBarTitle(mode == .new ? "New book" : viewModel.book.title,
+                          displayMode: mode == .new ? .inline : .large)
       .navigationBarItems(
         leading:
           Button(action: { self.handleCancelTapped() }) {
@@ -32,10 +54,10 @@ struct BookEditView: View {
           },
         trailing:
           Button(action: { self.handleDoneTapped() }) {
-            Text("Done")
+            Text(mode == .new ? "Done" : "Save")
           }
           .disabled(!viewModel.modified)
-        )
+      )
     }
   }
   
@@ -57,6 +79,6 @@ struct BookEditView_Previews: PreviewProvider {
   static var previews: some View {
     let book = Book(title: "Changer", author: "Matt Gemmell", numberOfPages: 474)
     let bookViewModel = BookViewModel(book: book)
-    return BookEditView(viewModel: bookViewModel)
+    return BookEditView(viewModel: bookViewModel, mode: .edit)
   }
 }

@@ -12,12 +12,15 @@ import SwiftUI
 struct BooksListView: View {
   @StateObject var viewModel = BooksViewModel()
   @State var presentAddBookSheet = false
-
+  
   var body: some View {
     NavigationView {
       List {
         ForEach (viewModel.books) { book in
           BookRowView(book: book)
+        }
+        .onDelete() { indexSet in
+          viewModel.removeBooks(atOffsets: indexSet)
         }
       }
       .navigationBarTitle("Books")
@@ -28,15 +31,17 @@ struct BooksListView: View {
         print("BooksListView appears. Subscribing to data updates.")
         self.viewModel.subscribe()
       }
-      // by unsubscribing from the view model, we prevent updates coming in from Firestore to be reflected in the UI
       .onDisappear() {
-        print("BooksListView disappears. Unsubscribing from data updates.")
-        self.viewModel.unsubscribe()
+        // By unsubscribing from the view model, we prevent updates coming in from
+        // Firestore to be reflected in the UI. Since we do want to receive updates
+        // when the user is on any of the child screens, we keep the subscription active!
+        // 
+        // print("BooksListView disappears. Unsubscribing from data updates.")
+        // self.viewModel.unsubscribe()
       }
       .sheet(isPresented: self.$presentAddBookSheet) {
         BookEditView()
       }
-
     }
   }
 }
@@ -44,16 +49,18 @@ struct BooksListView: View {
 struct BookRowView: View {
   var book: Book
   var body: some View {
-    VStack(alignment: .leading) {
-      Text(book.title)
-        .font(.headline)
-      Text(book.author)
-        .font(.subheadline)
-      Text("\(book.numberOfPages) pages")
-        .font(.subheadline)
-    }
-    .onAppear() {
-      print("BookRowView appears for \(self.book.title)")
+    NavigationLink(destination: BookDetailsView(book: book)) {
+      VStack(alignment: .leading) {
+        Text(book.title)
+          .font(.headline)
+        Text(book.author)
+          .font(.subheadline)
+        Text("\(book.numberOfPages) pages")
+          .font(.subheadline)
+      }
+      .onAppear() {
+        print("BookRowView appears for \(self.book.title)")
+      }
     }
   }
 }

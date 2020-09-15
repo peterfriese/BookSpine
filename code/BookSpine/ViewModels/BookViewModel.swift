@@ -37,7 +37,7 @@ class BookViewModel: ObservableObject {
   
   private var db = Firestore.firestore()
   
-  func addBook(_ book: Book) {
+  private func addBook(_ book: Book) {
     do {
       let _ = try db.collection("books").addDocument(from: book)
     }
@@ -46,10 +46,37 @@ class BookViewModel: ObservableObject {
     }
   }
   
+  private func updateBook(_ book: Book) {
+    if let documentId = book.id {
+      do {
+        try db.collection("books").document(documentId).setData(from: book)
+      }
+      catch {
+        print(error)
+      }
+    }
+  }
+  
+  private func updateOrAddBook(_ book: Book) {
+    if let documentId = book.id {
+      db.collection("books").document(documentId).getDocument { (documentSnapshot, error) in
+        if let exists = documentSnapshot?.exists, exists == true {
+          self.updateBook(book)
+        }
+        else {
+          self.addBook(book)
+        }
+      }
+    }
+    else {
+      addBook(book)
+    }
+  }
+  
   // MARK: - Model management
   
   func save() {
-    addBook(self.book)
+    updateOrAddBook(self.book)
   }
   
   // MARK: - UI handlers
