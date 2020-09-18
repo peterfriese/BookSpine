@@ -14,6 +14,12 @@ struct BookDetailsView: View {
   
   var book: Book
   
+  private func editButton(action: @escaping () -> Void) -> some View {
+    Button(action: { action() }) {
+      Text("Edit")
+    }
+  }
+  
   var body: some View {
     Form {
       Section(header: Text("Book")) {
@@ -26,7 +32,7 @@ struct BookDetailsView: View {
       }
     }
     .navigationBarTitle(book.title)
-    .navigationBarItems(trailing: EditBookButton() {
+    .navigationBarItems(trailing: editButton {
       self.presentEditBookSheet.toggle()
     })
     .onAppear() {
@@ -46,19 +52,12 @@ struct BookDetailsView: View {
   
 }
 
-struct EditBookButton: View {
-  var action: () -> Void
-  var body: some View {
-    Button(action: { self.action() }) {
-      Text("Edit")
-    }
-  }
-}
-
-
 struct BookDetailsView_Previews: PreviewProvider {
   static var previews: some View {
     let book = Book(title: "Changer", author: "Matt Gemmell", numberOfPages: 474)
-    return BookDetailsView(book: book)
+    return
+      NavigationView {
+        BookDetailsView(book: book)
+      }
   }
 }

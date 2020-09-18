@@ -13,20 +13,37 @@ struct BooksListView: View {
   @StateObject var viewModel = BooksViewModel()
   @State var presentAddBookSheet = false
   
+  private var addButton: some View {
+    Button(action: { self.presentAddBookSheet.toggle() }) {
+      Image(systemName: "plus")
+    }
+  }
+  
+  private func bookRowView(book: Book) -> some View {
+    NavigationLink(destination: BookDetailsView(book: book)) {
+      VStack(alignment: .leading) {
+        Text(book.title)
+          .font(.headline)
+        Text(book.author)
+          .font(.subheadline)
+        Text("\(book.numberOfPages) pages")
+          .font(.subheadline)
+      }
+    }
+  }
+  
   var body: some View {
     NavigationView {
       List {
         ForEach (viewModel.books) { book in
-          BookRowView(book: book)
+          bookRowView(book: book)
         }
         .onDelete() { indexSet in
           viewModel.removeBooks(atOffsets: indexSet)
         }
       }
       .navigationBarTitle("Books")
-      .navigationBarItems(trailing: AddBookButton() {
-        self.presentAddBookSheet.toggle()
-      })
+      .navigationBarItems(trailing: addButton)
       .onAppear() {
         print("BooksListView appears. Subscribing to data updates.")
         self.viewModel.subscribe()
@@ -42,34 +59,6 @@ struct BooksListView: View {
       .sheet(isPresented: self.$presentAddBookSheet) {
         BookEditView()
       }
-    }
-  }
-}
-
-struct BookRowView: View {
-  var book: Book
-  var body: some View {
-    NavigationLink(destination: BookDetailsView(book: book)) {
-      VStack(alignment: .leading) {
-        Text(book.title)
-          .font(.headline)
-        Text(book.author)
-          .font(.subheadline)
-        Text("\(book.numberOfPages) pages")
-          .font(.subheadline)
-      }
-      .onAppear() {
-        print("BookRowView appears for \(self.book.title)")
-      }
-    }
-  }
-}
-
-struct AddBookButton: View {
-  var action: () -> Void
-  var body: some View {
-    Button(action: { self.action() }) {
-      Image(systemName: "plus")
     }
   }
 }

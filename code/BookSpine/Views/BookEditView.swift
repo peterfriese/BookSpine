@@ -28,6 +28,19 @@ struct BookEditView: View {
   
   var completionHandler: ((Result<Action, Error>) -> Void)?
   
+  var cancelButton: some View {
+    Button(action: { self.handleCancelTapped() }) {
+      Text("Cancel")
+    }
+  }
+  
+  var saveButton: some View {
+    Button(action: { self.handleDoneTapped() }) {
+      Text(mode == .new ? "Done" : "Save")
+    }
+    .disabled(!viewModel.modified)
+  }
+  
   var body: some View {
     NavigationView {
       Form {
@@ -47,18 +60,11 @@ struct BookEditView: View {
           }
         }
       }
-      .navigationBarTitle(mode == .new ? "New book" : viewModel.book.title,
-                          displayMode: mode == .new ? .inline : .large)
+      .navigationTitle(mode == .new ? "New book" : viewModel.book.title)
+      .navigationBarTitleDisplayMode(mode == .new ? .inline : .large)
       .navigationBarItems(
-        leading:
-          Button(action: { self.handleCancelTapped() }) {
-            Text("Cancel")
-          },
-        trailing:
-          Button(action: { self.handleDoneTapped() }) {
-            Text(mode == .new ? "Done" : "Save")
-          }
-          .disabled(!viewModel.modified)
+        leading: cancelButton,
+        trailing: saveButton
       )
       .actionSheet(isPresented: $presentActionSheet) {
         ActionSheet(title: Text("Are you sure?"),
