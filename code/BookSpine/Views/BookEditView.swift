@@ -20,13 +20,18 @@ enum Action {
 }
 
 struct BookEditView: View {
+  // MARK: - State
+  
   @Environment(\.presentationMode) private var presentationMode
-  @ObservedObject var viewModel = BookViewModel()
   @State var presentActionSheet = false
+
+  // MARK: - State (Initialiser-modifiable)
   
+  @ObservedObject var viewModel = BookViewModel()
   var mode: Mode = .new
-  
   var completionHandler: ((Result<Action, Error>) -> Void)?
+  
+  // MARK: - UI Components
   
   var cancelButton: some View {
     Button(action: { self.handleCancelTapped() }) {
@@ -76,6 +81,8 @@ struct BookEditView: View {
       }
     }
   }
+  
+  // MARK: - Action Handlers
   
   func handleCancelTapped() {
     self.dismiss()

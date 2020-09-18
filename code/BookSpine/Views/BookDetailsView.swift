@@ -9,10 +9,16 @@
 import SwiftUI
 
 struct BookDetailsView: View {
+  // MARK: - State
+  
   @Environment(\.presentationMode) var presentationMode
   @State var presentEditBookSheet = false
   
+  // MARK: - State (Initialiser-modifiable)
+  
   var book: Book
+  
+  // MARK: - UI Components
   
   private func editButton(action: @escaping () -> Void) -> some View {
     Button(action: { action() }) {

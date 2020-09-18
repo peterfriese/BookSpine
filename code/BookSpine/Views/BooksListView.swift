@@ -10,8 +10,12 @@ import SwiftUI
 
 @available(iOS 14.0, *)
 struct BooksListView: View {
+  // MARK: - State
+  
   @StateObject var viewModel = BooksViewModel()
   @State var presentAddBookSheet = false
+  
+  // MARK: - UI Components
   
   private var addButton: some View {
     Button(action: { self.presentAddBookSheet.toggle() }) {
