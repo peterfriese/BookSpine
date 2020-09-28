@@ -8,9 +8,43 @@
 
 import SwiftUI
 
+enum Mode {
+  case new
+  case edit
+}
+
+enum Action {
+  case delete
+  case done
+  case cancel
+}
+
 struct BookEditView: View {
+  // MARK: - State
+  
   @Environment(\.presentationMode) private var presentationMode
-  @StateObject var viewModel = BookViewModel()
+  @State var presentActionSheet = false
+
+  // MARK: - State (Initialiser-modifiable)
+  
+  @ObservedObject var viewModel = BookViewModel()
+  var mode: Mode = .new
+  var completionHandler: ((Result<Action, Error>) -> Void)?
+  
+  // MARK: - UI Components
+  
+  var cancelButton: some View {
+    Button(action: { self.handleCancelTapped() }) {
+      Text("Cancel")
+    }
+  }
+  
+  var saveButton: some View {
+    Button(action: { self.handleDoneTapped() }) {
+      Text(mode == .new ? "Done" : "Save")
+    }
+    .disabled(!viewModel.modified)
+  }
   
   var body: some View {
     NavigationView {
@@ -23,29 +57,46 @@ struct BookEditView: View {
         Section(header: Text("Author")) {
           TextField("Author", text: $viewModel.book.author)
         }
-      }
-      .navigationBarTitle("New book", displayMode: .inline)
-      .navigationBarItems(
-        leading:
-          Button(action: { self.handleCancelTapped() }) {
-            Text("Cancel")
-          },
-        trailing:
-          Button(action: { self.handleDoneTapped() }) {
-            Text("Done")
+        
+        if mode == .edit {
+          Section {
+            Button("Delete book") { self.presentActionSheet.toggle() }
+              .foregroundColor(.red)
           }
-          .disabled(!viewModel.modified)
-        )
+        }
+      }
+      .navigationTitle(mode == .new ? "New book" : viewModel.book.title)
+      .navigationBarTitleDisplayMode(mode == .new ? .inline : .large)
+      .navigationBarItems(
+        leading: cancelButton,
+        trailing: saveButton
+      )
+      .actionSheet(isPresented: $presentActionSheet) {
+        ActionSheet(title: Text("Are you sure?"),
+                    buttons: [
+                      .destructive(Text("Delete book"),
+                                   action: { self.handleDeleteTapped() }),
+                      .cancel()
+                    ])
+      }
     }
   }
   
+  // MARK: - Action Handlers
+  
   func handleCancelTapped() {
-    dismiss()
+    self.dismiss()
   }
   
   func handleDoneTapped() {
     self.viewModel.handleDoneTapped()
-    dismiss()
+    self.dismiss()
+  }
+  
+  func handleDeleteTapped() {
+    viewModel.handleDeleteTapped()
+    self.dismiss()
+    self.completionHandler?(.success(.delete))
   }
   
   func dismiss() {
@@ -57,6 +108,6 @@ struct BookEditView_Previews: PreviewProvider {
   static var previews: some View {
     let book = Book(title: "Changer", author: "Matt Gemmell", numberOfPages: 474)
     let bookViewModel = BookViewModel(book: book)
-    return BookEditView(viewModel: bookViewModel)
+    return BookEditView(viewModel: bookViewModel, mode: .edit)
   }
 }
