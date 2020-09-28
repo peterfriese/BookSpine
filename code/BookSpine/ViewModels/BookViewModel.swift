@@ -58,15 +58,8 @@ class BookViewModel: ObservableObject {
   }
   
   private func updateOrAddBook() {
-    if let documentId = book.id {
-      db.collection("books").document(documentId).getDocument { (documentSnapshot, error) in
-        if let exists = documentSnapshot?.exists, exists == true {
-          self.updateBook(self.book)
-        }
-        else {
-          self.addBook(self.book)
-        }
-      }
+    if let _ = book.id {
+      self.updateBook(self.book)
     }
     else {
       addBook(book)
@@ -92,5 +85,5 @@ class BookViewModel: ObservableObject {
   func handleDeleteTapped() {
     self.removeBook()
   }
-
+  
 }
